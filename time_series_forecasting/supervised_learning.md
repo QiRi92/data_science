@@ -205,7 +205,7 @@ Careful thought and experimentation are needed on your problem to find a window 
 
 For Python code for how to do this, see the post:
 
-- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/time_series_super_learn.md" target="_blank">How to Convert a Time Series to a Supervised Learning Problem in Python</a>
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/time_series_super_learn.md">How to Convert a Time Series to a Supervised Learning Problem in Python</a>
 
 ## Summary
 
