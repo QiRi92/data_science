@@ -573,3 +573,7 @@ Specifically, you learned:
 - About the Pandas *shift()* function and how it can be used to automatically define supervised learning datasets from time series data.
 - How to reframe a univariate time series into one-step and multi-step supervised learning problems.
 - How to reframe multivariate time series into one-step and multi-step supervised learning problems.
+
+## References
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/time_series_super_learn.ipynb">Full Code</a>
