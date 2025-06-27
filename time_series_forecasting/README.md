@@ -39,7 +39,7 @@ Once it is reframed, we can then apply all of our favorite learning algorithms l
 
 For more help, see the post:
 
-- <a href="">Time Series Forecasting as Supervised Learning</a>
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/supervised_learning.md">Time Series Forecasting as Supervised Learning</a>
 
 ## <a id="lesson02">Lesson 02: Load Time Series Data</a>
 
