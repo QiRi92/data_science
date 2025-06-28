@@ -257,3 +257,7 @@ Specifically, you learned:
 - How to load your time series data as a Pandas Series.
 - How to peek at and calculate summary statistics of your time series data.
 - How to plot your time series data.
+
+## References
+
+<a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/load_explore.ipynb">Code</a>
