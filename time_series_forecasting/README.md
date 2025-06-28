@@ -69,7 +69,7 @@ Get used to exploring loaded time series data in Python:
 
 For more help, see the post:
 
-- <a href="">How to Load and Explore Time Series Data in Python</a>
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/load_explore.md">How to Load and Explore Time Series Data in Python</a>
 
 ## <a id="lesson03">Lesson 03: Data Visualization</a>
 
