@@ -404,3 +404,7 @@ Specifically, you learned:
 - How to explore the temporal relationships with line, scatter, and autocorrelation plots.
 - How to explore the distribution of observations with histograms and density plots.
 - How to explore the change in distribution of observations with box and whisker and heat map plots.
+
+## References
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/data_visualization.ipynb">Reference</a>
