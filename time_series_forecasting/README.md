@@ -104,7 +104,7 @@ pyplot.show()
 
 For more help, see the post:
 
-- <a href="">Time Series Data Visualization with Python</a>
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/data_visualization.md">Time Series Data Visualization with Python</a>
 
 ## <a id="lesson04">Lesson 04: Persistence Forecast Model</a>
 
