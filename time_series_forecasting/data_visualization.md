@@ -407,4 +407,4 @@ Specifically, you learned:
 
 ## References
 
-- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/data_visualization.ipynb">Reference</a>
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/data_visualization.ipynb">Code</a>
