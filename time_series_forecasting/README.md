@@ -225,6 +225,8 @@ Split the data, perhaps extract the last 1 or 2 years to a separate file. Work t
 5. Develop an ARIMA model.
 6. Visualize forecasts and summarize forecast error.
 
+## Summary
+
 You discovered:
 
 - How to frame a time series forecasting problem as supervised learning.
