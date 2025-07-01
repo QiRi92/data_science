@@ -144,7 +144,7 @@ rmse = sqrt(mean_squared_error(actual, predictions))
 
 For more help, see the post:
 
-- <a href="">How to Make Baseline Predictions for Time Series Forecasting with Python</a>
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/base_predict.md">How to Make Baseline Predictions for Time Series Forecasting with Python</a>
 
 ## <a id="lesson05">Lesson 05: Autoregressive Forecast Model</a>
 
