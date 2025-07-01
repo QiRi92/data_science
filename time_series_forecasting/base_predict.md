@@ -287,3 +287,6 @@ Specifically, you learned:
 - How to implement the persistence algorithm in Python from scratch.
 - How to evaluate the forecasts of the persistence algorithm and use them as a baseline.
 
+## Reference
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/base_predict.ipynb">Code</a>
