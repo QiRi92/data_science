@@ -173,7 +173,7 @@ You may want to experiment by fitting the model on half of the dataset and predi
 
 For more help, see the post:
 
-- <a href="">Autoregression Models for Time Series Forecasting With Python</a>
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/autoregression_models.md">Autoregression Models for Time Series Forecasting With Python</a>
 
 ## <a id="lesson06">Lesson 06: ARIMA Forecast Model</a>
 
