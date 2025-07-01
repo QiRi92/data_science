@@ -100,3 +100,190 @@ Running the example plots the time series, as follows:
 
 ## Persistence Algorithm
 
+A persistence model can be implemented easily in Python.
+
+We will break this section down into 4 steps:
+
+1. Transform the univariate dataset into a supervised learning problem.
+2. Establish the train and test datasets for the test harness.
+3. Define the persistence model.
+4. Make a forecast and establish a baseline performance.
+5. Review the complete example and plot the output.
+
+### Step 1: Define the Supervised Learning Problem
+
+The first step is to load the dataset and create a lagged representation. That is, given the observation at t-1, predict the observation at t+1.
+
+```python
+import pandas as pd
+from pandas import DataFrame, concat
+
+# Create lagged dataset
+values = DataFrame(series.values)
+dataframe = concat([values.shift(1), values], axis=1)
+dataframe.columns = ['t-1', 't+1']
+print(dataframe.head(5))
+```
+
+This snippet creates the dataset and prints the first 5 rows of the new dataset.
+
+We can see that the first row (index 0) will have to be discarded as there was no observation prior to the first observation to use to make the prediction.
+
+From a supervised learning perspective, the t-1 column is the input variable, or X, and the t+1 column is the output variable, or y.
+
+```
+     t-1    t+1
+0    NaN  266.0
+1  266.0  145.9
+2  145.9  183.1
+3  183.1  119.3
+4  119.3  180.3
+```
+
+### Step 2: Train and Test Sets
+
+The next step is to separate the dataset into train and test sets.
+
+We will keep the first 66% of the observations for “training” and the remaining 34% for evaluation. During the split, we are careful to exclude the first row of data with the NaN value.
+
+No training is required in this case; it’s just habit. Each of the train and test sets are then split into the input and output variables.
+
+```python
+# split into train and test sets
+X = dataframe.values
+train_size = int(len(X) * 0.66)
+train, test = X[1:train_size], X[train_size:]
+train_X, train_y = train[:,0], train[:,1]
+test_X, test_y = test[:,0], test[:,1]
+```
+
+### Step 3: Persistence Algorithm
+
+We can define our persistence model as a function that returns the value provided as input.
+
+For example, if the t-1 value of 266.0 was provided, then this is returned as the prediction, whereas the actual real or expected value happens to be 145.9 (taken from the first usable row in our lagged dataset).
+
+```python
+# persistence model
+def model_persistence(x):
+	return x
+```
+
+### Step 4: Make and Evaluate Forecast
+
+Now we can evaluate this model on the test dataset.
+
+We do this using the walk-forward validation method.
+
+No model training or retraining is required, so in essence, we step through the test dataset time step by time step and get predictions.
+
+Once predictions are made for each time step in the training dataset, they are compared to the expected values and a Mean Squared Error (MSE) score is calculated.
+
+```python
+from sklearn.metrics import mean_squared_error
+
+# walk-forward validation
+predictions = list()
+for x in test_X:
+	yhat = model_persistence(x)
+	predictions.append(yhat)
+test_score = mean_squared_error(test_y, predictions)
+print('Test MSE: %.3f' % test_score)
+```
+
+In this case, the error is more than 17,730 over the test dataset.
+
+```
+Test MSE: 17730.518
+```
+
+### Step 5: Complete Example
+
+Finally, a plot is made to show the training dataset and the diverging predictions from the expected values from the test dataset.
+
+From the plot of the persistence model predictions, it is clear that the model is 1-step behind reality. There is a rising trend and month-to-month noise in the sales figures, which highlights the limitations of the persistence technique.
+
+<img width="428" alt="image" src="https://github.com/user-attachments/assets/485ec00f-8720-426c-a105-38cccfe79c26" />
+
+The complete example is listed below.
+
+```python
+from pandas import read_csv
+from datetime import datetime
+from pandas import DataFrame
+from pandas import concat
+from matplotlib import pyplot
+from sklearn.metrics import mean_squared_error
+
+def parser(x):
+	return datetime.strptime('190'+x, '%Y-%m')
+
+series = read_csv('shampoo-sales.csv', header=0, parse_dates=[0], index_col=0, date_parser=parser)
+# Create lagged dataset
+values = DataFrame(series.values)
+dataframe = concat([values.shift(1), values], axis=1)
+dataframe.columns = ['t-1', 't+1']
+print(dataframe.head(5))
+
+# split into train and test sets
+X = dataframe.values
+train_size = int(len(X) * 0.66)
+train, test = X[1:train_size], X[train_size:]
+train_X, train_y = train[:,0], train[:,1]
+test_X, test_y = test[:,0], test[:,1]
+
+# persistence model
+def model_persistence(x):
+	return x
+
+# walk-forward validation
+predictions = list()
+for x in test_X:
+	yhat = model_persistence(x)
+	predictions.append(yhat)
+test_score = mean_squared_error(test_y, predictions)
+print('Test MSE: %.3f' % test_score)
+
+# plot predictions and expected results
+pyplot.plot(train_y)
+pyplot.plot([None for i in train_y] + [x for x in test_y])
+pyplot.plot([None for i in train_y] + [x for x in predictions])
+pyplot.show()
+```
+
+Output:
+
+```
+     t-1    t+1
+0    NaN  266.0
+1  266.0  145.9
+2  145.9  183.1
+3  183.1  119.3
+4  119.3  180.3
+Test MSE: 17730.518
+```
+
+<img width="393" alt="image" src="https://github.com/user-attachments/assets/7cfe4b58-948f-402a-a752-d9423a38d7ad" />
+
+We have seen an example of the persistence model developed from scratch for the Shampoo Sales problem.
+
+The persistence algorithm is naive. It is often called the naive forecast.
+
+It assumes nothing about the specifics of the time series problem to which it is applied. This is what makes it so easy to understand and so quick to implement and evaluate.
+
+As a machine learning practitioner, it can also spark a large number of improvements.
+
+Write them down.
+
+This is useful because these ideas can become input features in a feature engineering effort or simple models that may be combined in an ensembling effort later.
+
+## Summary
+
+In this tutorial, you discovered how to establish a baseline performance on time series forecast problems with Python.
+
+Specifically, you learned:
+
+- The importance of establishing a baseline and the persistence algorithm that you can use.
+- How to implement the persistence algorithm in Python from scratch.
+- How to evaluate the forecasts of the persistence algorithm and use them as a baseline.
+
