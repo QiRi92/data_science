@@ -414,3 +414,7 @@ Specifically, you learned:
 - About autocorrelation and autoregression and how they can be used to better understand time series data.
 - How to explore the autocorrelation in a time series using plots and statistical tests.
 - How to train an autoregression model in Python and use it to make short-term and rolling forecasts.
+
+Reference
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/autoregression_models.ipynb">Code</a>
