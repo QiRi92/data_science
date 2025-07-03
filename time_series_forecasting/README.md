@@ -204,7 +204,7 @@ The shampoo dataset has a trend so I’d recommend a d value of 1. Experiment wi
 
 For more help, see the post:
 
-- <a href="">How to Create an ARIMA Model for Time Series Forecasting with Python</a>
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/arima_model.md">How to Create an ARIMA Model for Time Series Forecasting with Python</a>
 
 ## <a id="lesson07">Lesson 07: Hello World End-to-End Project</a>
 
