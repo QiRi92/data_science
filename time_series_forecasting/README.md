@@ -225,6 +225,10 @@ Split the data, perhaps extract the last 1 or 2 years to a separate file. Work t
 5. Develop an ARIMA model.
 6. Visualize forecasts and summarize forecast error.
 
+For an example of working through a project, see the post:
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/time_series_forecasting/time_forecast_sample.md">Time Series Forecast Study with Python: Monthly Sales of Bread</a>
+
 ## Summary
 
 You discovered:
