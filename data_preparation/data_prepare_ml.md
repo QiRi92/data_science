@@ -190,3 +190,178 @@ Output:
  [0.77065362 0.50132629 0.48207176 0.5076991  0.4293882 ]]
 ```
 
+## Lesson 05: Transform Categories With One-Hot Encoding
+
+In this lesson, you will discover how to encode categorical input variables as numbers.
+
+Machine learning models require all input and output variables to be numeric. This means that if your data contains categorical data, you must encode it to numbers before you can fit and evaluate a model.
+
+One of the most popular techniques for transforming categorical variables into numbers is the one-hot encoding.
+
+<a href="https://en.wikipedia.org/wiki/Categorical_variable">Categorical data</a> are variables that contain label values rather than numeric values.
+
+Each label for a categorical variable can be mapped to a unique integer, called an ordinal encoding. Then, a one-hot encoding can be applied to the ordinal representation. This is where one new binary variable is added to the dataset for each unique integer value in the variable, and the original categorical variable is removed from the dataset.
+
+For example, imagine we have a “*color*” variable with three categories (‘*red*‘, ‘*green*‘, and ‘*blue*‘). In this case, three binary variables are needed. A “1” value is placed in the binary variable for the color and “0” values for the other colors.
+
+For example:
+
+```
+red,		green,		blue
+1,		0,		0
+0,		1,		0
+0,		0,		1
+```
+
+This one-hot encoding transform is available in the scikit-learn Python machine learning library via the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html">OneHotEncoder class</a>.
+
+The breast cancer dataset contains only categorical input variables.
+
+The example below loads the dataset and one hot encodes each of the categorical input variables.
+
+```python
+# one-hot encode the breast cancer dataset
+from pandas import read_csv
+from sklearn.preprocessing import OneHotEncoder
+# define the location of the dataset
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/breast-cancer.csv"
+# load the dataset
+dataset = read_csv(url, header=None)
+# retrieve the array of data
+data = dataset.values
+# separate into input and output columns
+X = data[:, :-1].astype(str)
+y = data[:, -1].astype(str)
+# summarize the raw data
+print(X[:3, :])
+# define the one hot encoding transform
+encoder = OneHotEncoder(sparse_output=False)
+# fit and apply the transform to the input data
+X_oe = encoder.fit_transform(X)
+# summarize the transformed data
+print(X_oe[:3, :])
+```
+
+Output:
+
+```
+[["'40-49'" "'premeno'" "'15-19'" "'0-2'" "'yes'" "'3'" "'right'"
+  "'left_up'" "'no'"]
+ ["'50-59'" "'ge40'" "'15-19'" "'0-2'" "'no'" "'1'" "'right'" "'central'"
+  "'no'"]
+ ["'50-59'" "'ge40'" "'35-39'" "'0-2'" "'no'" "'2'" "'left'" "'left_low'"
+  "'no'"]]
+[[0. 0. 1. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0.
+  0. 0. 0. 0. 1. 0. 0. 0. 1. 0. 1. 0. 0. 1. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0.
+  0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 1. 1. 0. 0. 0. 0. 0. 1. 0.]
+ [0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 1. 0. 0. 0.
+  0. 0. 0. 1. 0. 0. 0. 1. 0. 1. 0. 0. 1. 0. 0. 0. 0. 1. 0.]]
+```
+
+## Lesson 06: Transform Numbers to Categories With kBins
+
+In this lesson, you will discover how to transform numerical variables into categorical variables.
+
+Some machine learning algorithms may prefer or require categorical or ordinal input variables, such as some decision tree and rule-based algorithms.
+
+This could be caused by outliers in the data, multi-modal distributions, highly exponential distributions, and more.
+
+Many machine learning algorithms prefer or perform better when numerical input variables with non-standard distributions are transformed to have a new distribution or an entirely new data type.
+
+One approach is to use the transform of the numerical variable to have a discrete probability distribution where each numerical value is assigned a label and the labels have an ordered (ordinal) relationship.
+
+This is called a discretization transform and can improve the performance of some machine learning models for datasets by making the probability distribution of numerical input variables discrete.
+
+The discretization transform is available in the scikit-learn Python machine learning library via the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.KBinsDiscretizer.html">KBinsDiscretizer class</a>.
+
+It allows you to specify the number of discrete bins to create (*n_bins*), whether the result of the transform will be an ordinal or one-hot encoding (encode), and the distribution used to divide up the values of the variable (strategy), such as ‘*uniform*.’
+
+The example below creates a synthetic input variable with 10 numerical input variables, then encodes each into 10 discrete bins with an ordinal encoding.
+
+```python
+# discretize numeric input variables
+from sklearn.datasets import make_classification
+from sklearn.preprocessing import KBinsDiscretizer
+# define dataset
+X, y = make_classification(n_samples=1000, n_features=5, n_informative=5, n_redundant=0, random_state=1)
+# summarize data before the transform
+print(X[:3, :])
+# define the transform
+trans = KBinsDiscretizer(n_bins=10, encode='ordinal', strategy='uniform')
+# transform the data
+X_discrete = trans.fit_transform(X)
+# summarize data after the transform
+print(X_discrete[:3, :])
+```
+
+Output:
+
+```
+[[ 2.39324489 -5.77732048 -0.59062319 -2.08095322  1.04707034]
+ [-0.45820294  1.94683482 -2.46471441  2.36590955 -0.73666725]
+ [ 2.35162422 -1.00061698 -0.5946091   1.12531096 -0.65267587]]
+[[7. 0. 4. 1. 5.]
+ [4. 7. 2. 6. 4.]
+ [7. 5. 4. 5. 4.]]
+```
+
+## Lesson 07: Dimensionality Reduction With PCA
+
+In this lesson, you will discover how to use dimensionality reduction to reduce the number of input variables in a dataset.
+
+The number of input variables or features for a dataset is referred to as its dimensionality.
+
+Dimensionality reduction refers to techniques that reduce the number of input variables in a dataset.
+
+More input features often make a predictive modeling task more challenging to model, more generally referred to as the curse of dimensionality.
+
+Although on high-dimensionality statistics, dimensionality reduction techniques are often used for data visualization, these techniques can be used in applied machine learning to simplify a classification or regression dataset in order to better fit a predictive model.
+
+Perhaps the most popular technique for dimensionality reduction in machine learning is Principal Component Analysis, or PCA for short. This is a technique that comes from the field of linear algebra and can be used as a data preparation technique to create a projection of a dataset prior to fitting a model.
+
+The resulting dataset, the projection, can then be used as input to train a machine learning model.
+
+The scikit-learn library provides the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html">PCA class</a> that can be fit on a dataset and used to transform a training dataset and any additional datasets in the future.
+
+The example below creates a synthetic binary classification dataset with 10 input variables then uses PCA to reduce the dimensionality of the dataset to the three most important components.
+
+```python
+# example of pca for dimensionality reduction
+from sklearn.datasets import make_classification
+from sklearn.decomposition import PCA
+# define dataset
+X, y = make_classification(n_samples=1000, n_features=10, n_informative=3, n_redundant=7, random_state=1)
+# summarize data before the transform
+print(X[:3, :])
+# define the transform
+trans = PCA(n_components=3)
+# transform the data
+X_dim = trans.fit_transform(X)
+# summarize data after the transform
+print(X_dim[:3, :])
+```
+
+Output:
+
+```
+[[-0.53448246  0.93837451  0.38969914  0.0926655   1.70876508  1.14351305
+  -1.47034214  0.11857673 -2.72241741  0.2953565 ]
+ [-2.42280473 -1.02658758 -2.34792156 -0.82422408  0.59933419 -2.44832253
+   0.39750207  2.0265065   1.83374105  0.72430365]
+ [-1.83391794 -1.1946668  -0.73806871  1.50947233  1.78047734  0.58779205
+  -2.78506977 -0.04163788 -1.25227833  0.99373587]]
+[[-1.64710578  2.11683302 -1.98256096]
+ [ 0.92840209 -4.8294997  -0.22727043]
+ [-3.83677757 -0.32300714 -0.11512801]]
+```
+
+You discovered:
+
+The importance of data preparation in a predictive modeling machine learning project.
+How to mark missing data and impute the missing values using statistical imputation.
+How to remove redundant input variables using recursive feature elimination.
+How to transform input variables with differing scales to a standard range called normalization.
+How to transform categorical input variables to be numbers called one-hot encoding.
+How to transform numerical variables into discrete categories called discretization.
+How to use PCA to create a projection of a dataset into a lower number of dimensions.
