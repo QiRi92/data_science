@@ -59,7 +59,7 @@ Each of these tasks is a whole field of study with specialized algorithms.
 
 In this lesson, you will discover how to identify and fill missing values in data.
 
-Real-world data often has <a href="">missing values</a>.
+Real-world data often has missing values.
 
 Data can have missing values for a number of reasons, such as observations that were not recorded and data corruption. Handling missing data is important as many machine learning algorithms do not support data with missing values.
 
