@@ -117,5 +117,51 @@ Below are some constraints that can be imposed on the construction of decision t
 - **Tree depth**, deeper trees are more complex trees and shorter trees are preferred. Generally, better results are seen with 4-8 levels.
 - **Number of nodes or number of leaves**, like depth, this can constrain the size of the tree, but is not constrained to a symmetrical structure if other constraints are used.
 - **Number of observations** per split imposes a minimum constraint on the amount of training data at a training node before a split can be considered
-- **Minimim improvement to loss** is a constraint on the improvement of any split added to a tree.
+- **Minimum improvement to loss** is a constraint on the improvement of any split added to a tree.
 
+### 2. Weighted Updates
+
+The predictions of each tree are added together sequentially.
+
+The contribution of each tree to this sum can be weighted to slow down the learning by the algorithm. This weighting is called a shrinkage or a learning rate.
+
+The effect is that learning is slowed down, in turn require more trees to be added to the model, in turn taking longer to train, providing a configuration trade-off between the number of trees and learning rate.
+
+It is common to have small values in the range of 0.1 to 0.3, as well as values less than 0.1.
+
+### 3. Stochastic Gradient Boosting
+
+A big insight into bagging ensembles and random forest was allowing trees to be greedily created from subsamples of the training dataset.
+
+This same benefit can be used to reduce the correlation between the trees in the sequence in gradient boosting models.
+
+This variation of boosting is called stochastic gradient boosting.
+
+A few variants of stochastic boosting that can be used:
+
+- Subsample rows before creating each tree.
+- Subsample columns before creating each tree
+- Subsample columns before considering each split.
+
+Generally, aggressive sub-sampling such as selecting only 50% of the data has shown to be beneficial.
+
+### 4. Penalized Gradient Boosting
+
+Additional constraints can be imposed on the parameterized trees in addition to their structure.
+
+Classical decision trees like CART are not used as weak learners, instead a modified form called a regression tree is used that has numeric values in the leaf nodes (also called terminal nodes). The values in the leaves of the trees can be called weights in some literature.
+
+As such, the leaf weight values of the trees can be regularized using popular regularization functions, such as:
+
+- L1 regularization of weights.
+- L2 regularization of weights.
+
+## Summary
+
+In this post you discovered the gradient boosting algorithm for predictive modeling in machine learning.
+
+Specifically, you learned:
+
+- The history of boosting in learning theory and AdaBoost.
+- How the gradient boosting algorithm works with a loss function, weak learners and an additive model.
+- How to improve the performance of gradient boosting with regularization.
