@@ -22,7 +22,7 @@ Hypothesis boosting was the idea of filtering observations, leaving those observ
 
 ### AdaBoost the First Boosting Algorithm
 
-The first realization of boosting that saw great success in application was Adaptive Boosting or AdaBoost for short.
+The first realization of boosting that saw great success in application was <a href="https://github.com/QiRi92/data_science/blob/main/XGBoost/1_1_adaboost.md">Adaptive Boosting or AdaBoost</a> for short.
 
 The weak learners in AdaBoost are decision trees with a single split, called decision stumps for their shortness.
 
