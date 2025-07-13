@@ -222,3 +222,161 @@ print("Accuracy: %.2f%%" % (accuracy * 100.0))
 In the next lesson, we will look at how we calculate the importance of features using XGBoost
 
 ## Lesson 05: Feature Importance with XGBoost
+
+A benefit of using ensembles of decision tree methods like gradient boosting is that they can automatically provide estimates of feature importance from a trained predictive model.
+
+A trained XGBoost model automatically calculates feature importance on your predictive modeling problem.
+
+These importance scores are available in the **feature_importances_** member variable of the trained model. For example, they can be printed directly as follows:
+
+```python
+print(model.feature_importances_)
+```
+
+The XGBoost library provides a built-in function to plot features ordered by their importance.
+
+The function is called **plot_importance()** and can be used as follows:
+
+```python
+plot_importance(model)
+pyplot.show()
+```
+
+These importance scores can help you decide what input variables to keep or discard. They can also be used as the basis for automatic feature selection techniques.
+
+The full example of plotting feature importance scores using the Pima Indians Onset of Diabetes dataset is provided below.
+
+```python
+# plot feature importance using built-in function
+from numpy import loadtxt
+from xgboost import XGBClassifier
+from xgboost import plot_importance
+from matplotlib import pyplot
+# load data
+dataset = loadtxt('pima-indians-diabetes.csv', delimiter=",")
+# split data into X and y
+X = dataset[:,0:8]
+y = dataset[:,8]
+# fit model on training data
+model = XGBClassifier()
+model.fit(X, y)
+# plot feature importance
+plot_importance(model)
+pyplot.show()
+```
+
+Output:
+
+<img width="448" height="331" alt="image" src="https://github.com/user-attachments/assets/052f0e40-4414-4f7c-84da-20237c19f3c1" />
+
+In the next lesson we will look at heuristics for best configuring the gradient boosting algorithm.
+
+## Lesson 06: How to Configure Gradient Boosting
+
+Gradient boosting is one of the most powerful techniques for applied machine learning and as such is quickly becoming one of the most popular.
+
+But how do you configure gradient boosting on your problem?
+
+A number of configuration heuristics were published in the original gradient boosting papers. They can be summarized as:
+
+- Learning rate or shrinkage (**learning_rate** in XGBoost) should be set to 0.1 or lower, and smaller values will require the addition of more trees.
+- The depth of trees (**max_depth** in XGBoost) should be configured in the range of 2-to-8, where not much benefit is seen with deeper trees.
+- Row sampling (**subsample** in XGBoost) should be configured in the range of 30% to 80% of the training dataset, and compared to a value of 100% for no sampling.
+
+These are a good starting points when configuring your model.
+
+A good general configuration strategy is as follows:
+
+1. Run the default configuration and review plots of the learning curves on the training and validation datasets.
+2. If the system is overlearning, decrease the learning rate and/or increase the number of trees.
+3. If the system is underlearning, speed the learning up to be more aggressive by increasing the learning rate and/or decreasing the number of trees.
+
+<a href="https://goo.gl/OqIRIc">Owen Zhang</a>, the former #1 ranked competitor on Kaggle and now CTO at Data Robot proposes an interesting strategy to configure XGBoost.
+
+He suggests to set the number of trees to a target value such as 100 or 1000, then tune the learning rate to find the best model. This is an efficient strategy for quickly finding a good model.
+
+In the next and final lesson, we will look at an example of tuning the XGBoost hyperparameters.
+
+## Lesson 07: XGBoost Hyperparameter Tuning
+
+The scikit-learn framework provides the capability to search combinations of parameters.
+
+This capability is provided in the **GridSearchCV** class and can be used to discover the best way to configure the model for top performance on your problem.
+
+For example, we can define a grid of the number of trees (**n_estimators**) and tree sizes (**max_depth**) to evaluate by defining a grid as:
+
+```python
+n_estimators = [50, 100, 150, 200]
+max_depth = [2, 4, 6, 8]
+param_grid = dict(max_depth=max_depth, n_estimators=n_estimators)
+```
+
+And then evaluate each combination of parameters using 10-fold cross validation as:
+
+```python
+kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=7)
+grid_search = GridSearchCV(model, param_grid, scoring="neg_log_loss", n_jobs=-1, cv=kfold, verbose=1)
+result = grid_search.fit(X, label_encoded_y)
+```
+
+We can then review the results to determine the best combination and the general trends in varying the combinations of parameters.
+
+This is the best practice when applying XGBoost to your own problems. The parameters to consider tuning are:
+
+- The number and size of trees (**n_estimators** and **max_depth**).
+- The learning rate and number of trees (**learning_rate** and **n_estimators**).
+- The row and column subsampling rates (**subsample**, **colsample_bytree** and **colsample_bylevel**).
+
+Below is a full example of tuning just the **learning_rate** on the Pima Indians Onset of Diabetes dataset.
+
+```python
+# Tune learning_rate
+from numpy import loadtxt
+from xgboost import XGBClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import StratifiedKFold
+# load data
+dataset = loadtxt('pima-indians-diabetes.csv', delimiter=",")
+# split data into X and y
+X = dataset[:,0:8]
+Y = dataset[:,8]
+# grid search
+model = XGBClassifier()
+learning_rate = [0.0001, 0.001, 0.01, 0.1, 0.2, 0.3]
+param_grid = dict(learning_rate=learning_rate)
+kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=7)
+grid_search = GridSearchCV(model, param_grid, scoring="neg_log_loss", n_jobs=-1, cv=kfold)
+grid_result = grid_search.fit(X, Y)
+# summarize results
+print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
+means = grid_result.cv_results_['mean_test_score']
+stds = grid_result.cv_results_['std_test_score']
+params = grid_result.cv_results_['params']
+for mean, stdev, param in zip(means, stds, params):
+	print("%f (%f) with: %r" % (mean, stdev, param))
+```
+
+Output:
+
+```
+Best: -0.517018 using {'learning_rate': 0.01}
+-0.643877 (0.002168) with: {'learning_rate': 0.0001}
+-0.620317 (0.006926) with: {'learning_rate': 0.001}
+-0.517018 (0.036275) with: {'learning_rate': 0.01}
+-0.557111 (0.115078) with: {'learning_rate': 0.1}
+-0.662438 (0.149560) with: {'learning_rate': 0.2}
+-0.750694 (0.199802) with: {'learning_rate': 0.3}
+```
+
+## XGBoost Learning Mini-Course Review
+
+Take a moment and look back at how far you have come:
+
+- You learned about the gradient boosting algorithm and the XGBoost library.
+- You developed your first XGBoost model.
+- You learned how to use advanced features like early stopping and feature importance.
+- You learned how to configure gradient boosted models and how to design controlled experiments to tune XGBoost hyperparameters.
+
+## Reference
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/XGBoost/4_xgboost_course.ipynb" rel="noopener" target="_blank">Codes</a>
