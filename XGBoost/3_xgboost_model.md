@@ -146,3 +146,54 @@ print("Accuracy: %.2f%%" % (accuracy * 100.0))
 
 ## 6. Tie it All Together
 
+We can tie all of these pieces together, below is the full code listing.
+
+```python
+# First XGBoost model for Pima Indians dataset
+from numpy import loadtxt
+from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+# load data
+dataset = loadtxt('pima-indians-diabetes.csv', delimiter=",")
+# split data into X and y
+X = dataset[:,0:8]
+Y = dataset[:,8]
+# split data into train and test sets
+seed = 7
+test_size = 0.33
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=test_size, random_state=seed)
+# fit model no training data
+model = XGBClassifier()
+model.fit(X_train, y_train)
+# make predictions for test data
+y_pred = model.predict(X_test)
+predictions = [round(value) for value in y_pred]
+# evaluate predictions
+accuracy = accuracy_score(y_test, predictions)
+print("Accuracy: %.2f%%" % (accuracy * 100.0))
+```
+
+**Note**: Your results may vary given the stochastic nature of the algorithm or evaluation procedure, or differences in numerical precision. Consider running the example a few times and compare the average outcome.
+
+Running this example produces the following output.
+
+```
+Accuracy: 72.44%
+```
+
+This is a good accuracy score on this problem, which we would expect, given the capabilities of the model and the modest complexity of the problem.
+
+## Summary
+
+In this post you discovered how to develop your first XGBoost model in Python.
+
+Specifically, you learned:
+
+- How to install XGBoost on your system ready for use with Python.
+- How to prepare data and train your first XGBoost model on a standard machine learning dataset.
+- How to make predictions and evaluate the performance of a trained XGBoost model using scikit-learn.
+
+## Reference
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/XGBoost/3_xgboost_model.ipynb" rel="noopener" target="_blank">Codes</a>
