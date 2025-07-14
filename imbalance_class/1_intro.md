@@ -178,8 +178,8 @@ This section provides more resources on the topic if you are looking to go deepe
 
 ### Tutorials
 
-- 8 Tactics to Combat Imbalanced Classes in Your Machine Learning Dataset
-- How to Develop and Evaluate Naive Classifier Strategies Using Probability
+- <a href="https://github.com/QiRi92/data_science/blob/main/imbalance_class/1_1_way_handle_imbalance.md" rel="noopener" target="_blank">8 Tactics to Combat Imbalanced Classes in Your Machine Learning Dataset</a>
+- <a href="" rel="noopener" target="_blank">How to Develop and Evaluate Naive Classifier Strategies Using Probability</a>
 
 ## Summary
 
