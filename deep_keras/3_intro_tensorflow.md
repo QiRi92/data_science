@@ -116,3 +116,50 @@ You can learn more about the mechanics of TensorFlow in the <a href="https://www
 
 ## More Deep Learning Models
 
+Your TensorFlow installation comes with a number of Deep Learning models that you can use and experiment with directly.
+
+Firstly, you need to find out where TensorFlow was installed on your system. For example, you can use the following Python script:
+
+```python
+
+```
+
+For example, this could be:
+
+```
+
+```
+
+Change to this directory and take note of the models subdirectory. Included are a number of deep learning models with tutorial-like comments, such as:
+
+- Multi-threaded word2vec mini-batched skip-gram model
+- Multi-threaded word2vec unbatched skip-gram model
+- CNN for the CIFAR-10 network
+- Simple, end-to-end, LeNet-5-like convolutional MNIST model example
+- Sequence-to-sequence model with an attention mechanism
+
+Also, check the examples directory, which contains an example using the MNIST dataset.
+
+There is also an excellent <a href="https://www.tensorflow.org/tutorials">list of tutorials</a> on the main TensorFlow website. They show how to use different network types and different datasets and how to use the framework in various ways.
+
+Finally, there is the <a href="http://playground.tensorflow.org/">TensorFlow playground</a> where you can experiment with small networks right in your web browser.
+
+## TensorFlow Resources
+
+- <a href="https://www.tensorflow.org/">TensorFlow Official Homepage</a>
+
+- <a href="https://github.com/tensorflow/tensorflow">TensorFlow Project on GitHub</a>
+
+- <a href="https://www.tensorflow.org/tutorials">TensorFlow Tutorials</a>
+
+- <a href="https://www.udacity.com/course/deep-learning--ud730">TensorFlow Course on Udacity</a>
+
+## Summary
+
+In this post, you discovered the TensorFlow Python library for deep learning.
+
+You learned that it is a library for fast numerical computation, specifically designed for the types of operations required to develop and evaluate large deep learning models.
+
+## Reference
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/deep_keras/3_intro_tensorflow.ipynb" rel="noopener" target="_blank">Codes</a>
