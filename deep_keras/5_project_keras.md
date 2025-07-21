@@ -102,3 +102,39 @@ You are now ready to define your neural network model.
 
 ## 2. Define Keras Model
 
+Models in Keras are defined as a sequence of layers.
+
+We create a <a href="https://keras.io/models/sequential/">*Sequential model*</a> and add layers one at a time until we are happy with our network architecture.
+
+The first thing to get right is to ensure the input layer has the correct number of input features. This can be specified when creating the first layer with the **input_shape** argument and setting it to (8,) for presenting the eight input variables as a vector.
+
+How do we know the number of layers and their types?
+
+This is a tricky question. There are heuristics that you can use, and often the best network structure is found through a process of trial and error experimentation (I explain more about this here). Generally, you need a network large enough to capture the structure of the problem.
+
+In this example, let’s use a fully-connected network structure with three layers.
+
+Fully connected layers are defined using the <a href="https://keras.io/layers/core/">Dense class</a>. You can specify the number of neurons or nodes in the layer as the first argument and the activation function using the **activation** argument.
+
+Also, you will use the rectified linear unit activation function referred to as ReLU on the first two layers and the Sigmoid function in the output layer.
+
+It used to be the case that Sigmoid and Tanh activation functions were preferred for all layers. These days, better performance is achieved using the ReLU activation function. Using a sigmoid on the output layer ensures your network output is between 0 and 1 and is easy to map to either a probability of class 1 or snap to a hard classification of either class with a default threshold of 0.5.
+
+You can piece it all together by adding each layer:
+
+- The model expects rows of data with 8 variables (the *input_shape=(8,)* argument).
+- The first hidden layer has 12 nodes and uses the relu activation function.
+- The second hidden layer has 8 nodes and uses the relu activation function.
+- The output layer has one node and uses the sigmoid activation function.
+
+```python
+# define the keras model
+model = Sequential()
+model.add(Dense(12, input_shape=(8,), activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
+```
+
+**Note**:  The most confusing thing here is that the shape of the input to the model is defined as an argument on the first hidden layer. This means that the line of code that adds the first Dense layer is doing two things, defining the input or visible layer and the first hidden layer.
+
+## 3. Compile Keras Model
