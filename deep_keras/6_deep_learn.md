@@ -145,3 +145,268 @@ You can learn more about the Keras library on the <a href="http://keras.io/">Ker
 
 ## Lesson 04: Crash Course in Multi-Layer Perceptrons
 
+Artificial neural networks are a fascinating area of study, although they can be intimidating
+when just getting started.
+
+The field of artificial neural networks is often just called neural networks or multi-layer
+Perceptrons after perhaps the most useful type of neural network.
+
+The building block for neural networks are artificial neurons. These are simple computational
+units that have weighted input signals and produce an output signal using an activation function.
+
+Neurons are arranged into networks of neurons. A row of neurons is called a layer and one
+network can have multiple layers. The architecture of the neurons in the network is often called the network topology.
+
+Once configured, the neural network needs to be trained on your dataset. The classical and still preferred training algorithm for neural networks is called stochastic
+gradient descent.
+
+<img width="220" height="342" alt="image" src="https://github.com/user-attachments/assets/6999c646-5c26-45b2-86e2-7b9e6f83dd58" />
+
+Your goal for this lesson is to become familiar with neural network terminology.
+
+Dig a little deeper into terms like neuron, weights, activation function, learning rate and more.
+
+## Lesson 05: Develop Your First Neural Network in Keras
+
+Keras allows you to develop and evaluate deep learning models in very few lines of code.
+
+In this lesson your goal is to develop your first neural network using the Keras library.
+
+Use a standard binary (two-class) classification dataset from the UCI Machine Learning Repository, like the Pima Indians onset of diabetes or the <a href="https://archive.ics.uci.edu/ml/datasets/Ionosphere">ionosphere datasets</a>.
+
+Piece together code to achieve the following:
+
+1. Load your dataset using NumPy or Pandas.
+2. Define your neural network model and compile it.
+3. Fit your model to the dataset.
+4. Estimate the performance of your model on unseen data.
+
+To give you a massive kick start, below is a complete working example that you can use as a starting point.
+
+Download the dataset and place it in your current working directory.
+
+- <a href="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv">Dataset File</a>
+- <a href="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.names">Dataset Details</a>
+
+```python
+from keras.models import Sequential
+from keras.layers import Dense
+import numpy
+# Load the dataset
+dataset = numpy.loadtxt("pima-indians-diabetes.csv", delimiter=",")
+X = dataset[:,0:8]
+Y = dataset[:,8]
+# Define and Compile
+model = Sequential()
+model.add(Dense(12, input_dim=8, activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
+model.compile(loss='binary_crossentropy' , optimizer='adam', metrics=['accuracy'])
+# Fit the model
+model.fit(X, Y, epochs=150, batch_size=10)
+# Evaluate the model
+scores = model.evaluate(X, Y)
+print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+```
+
+Now develop your own model on a different dataset, or adapt this example.
+
+Learn more about the <a href="http://keras.io/models/sequential/">Keras API for simple model development</a>.
+
+## Lesson 06: Use Keras Models With Scikit-Learn
+
+The scikit-learn library is a general purpose machine learning framework in Python built on top of SciPy.
+
+Scikit-learn excels at tasks such as evaluating model performance and optimizing model hyperparameters in just a few lines of code.
+
+Keras provides a wrapper class that allows you to use your deep learning models with scikit-learn. For example, an instance of KerasClassifier class in Keras can wrap your deep learning model and be used as an Estimator in scikit-learn.
+
+When using the KerasClassifier class, you must specify the name of a function that the class can use to define and compile your model. You can also pass additional parameters to the constructor of the KerasClassifier class that will be passed to the *model.fit()* call later, like the number of epochs and batch size.
+
+In this lesson your goal is to develop a deep learning model and evaluate it using k-fold cross validation.
+
+For example, you can define an instance of the KerasClassifier and the custom function to create your model as follows:
+
+```python
+# Function to create model, required for KerasClassifier
+def create_model():
+	# Create model
+	model = Sequential()
+	...
+	# Compile model
+	model.compile(...)
+	return model
+
+# create classifier for use in scikit-learn
+model = KerasClassifier(build_fn=create_model, nb_epoch=150, batch_size=10)
+# evaluate model using 10-fold cross validation in scikit-learn
+kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=seed)
+results = cross_val_score(model, X, Y, cv=kfold)
+```
+
+Learn more about using your Keras deep learning models with scikit-learn on the <a href="http://keras.io/scikit-learn-api/">Wrappers for the Sciki-Learn API webpage</a>.
+
+## Lesson 07: Plot Model Training History
+
+You can learn a lot about neural networks and deep learning models by observing their performance over time during training.
+
+Keras provides the capability to register callbacks when training a deep learning model.
+
+One of the default callbacks that is registered when training all deep learning models is the History callback. It records training metrics for each epoch. This includes the loss and the accuracy (for classification problems) as well as the loss and accuracy for the validation dataset, if one is set.
+
+The history object is returned from calls to the fit() function used to train the model. Metrics are stored in a dictionary in the history member of the object returned.
+
+Your goal for this lesson is to investigate the history object and create plots of model performance during training.
+
+For example, you can print the list of metrics collected by your history object as follows:
+
+```python
+# list all data in history
+history = model.fit(...)
+print(history.history.keys())
+```
+
+You can learn more about the <a href="http://keras.io/callbacks/#history">History object and the callback API in Keras</a>.
+
+## Lesson 08: Save Your Best Model During Training With Checkpointing
+
+Application checkpointing is a fault tolerance technique for long running processes.
+
+The Keras library provides a checkpointing capability by a callback API. The ModelCheckpoint
+callback class allows you to define where to checkpoint the model weights, how the file should
+be named and under what circumstances to make a checkpoint of the model.
+
+Checkpointing can be useful to keep track of the model weights in case your training run is stopped prematurely. It is also useful to keep track of the best model observed during training.
+
+In this lesson, your goal is to use the ModelCheckpoint callback in Keras to keep track of the best model observed during training.
+
+You could define a ModelCheckpoint that saves network weights to the same file each time an improvement is observed. For example:
+
+```python
+from keras.callbacks import ModelCheckpoint
+...
+checkpoint = ModelCheckpoint('weights.best.hdf5', monitor='val_accuracy', save_best_only=True, mode='max')
+callbacks_list = [checkpoint]
+# Fit the model
+model.fit(..., callbacks=callbacks_list)
+```
+
+Learn more about using the <a href="http://keras.io/callbacks/#modelcheckpoint">ModelCheckpoint callback in Keras</a>.
+
+## Lesson 09: Reduce Overfitting With Dropout Regularization
+
+A big problem with neural networks is that they can overlearn your training dataset.
+
+Dropout is a simple yet very effective technique for reducing dropout and has proven useful in large deep learning models.
+
+Dropout is a technique where randomly selected neurons are ignored during training. They are dropped-out randomly. This means that their contribution to the activation of downstream neurons is temporally removed on the forward pass and any weight updates are not applied to the neuron on the backward pass.
+
+You can add a dropout layer to your deep learning model using the Dropout layer class.
+
+In this lesson your goal is to experiment with adding dropout at different points in your neural network and set to different probability of dropout values.
+
+For example, you can create a dropout layer with the probability of 20% and add it to your model as follows:
+
+```python
+from keras.layers import Dropout
+...
+model.add(Dropout(0.2))
+```
+
+You can learn more <a href="http://keras.io/layers/core/#dropout">about dropout in Keras</a>.
+
+## Lesson 10: Lift Performance With Learning Rate Schedules
+
+You can often get a boost in the performance of your model by using a learning rate schedule.
+
+Often called an adaptive learning rate or an annealed learning rate, this is a technique where the learning rate used by stochastic gradient descent changes while training your model.
+
+Keras has a time-based learning rate schedule built into the implementation of the stochastic gradient descent algorithm in the SGD class.
+
+When constructing the class, you can specify the decay which is the amount that your learning rate (also specified) will decrease each epoch. When using learning rate decay you should bump up your initial learning rate and consider adding a large momentum value such as 0.8 or 0.9.
+
+Your goal in this lesson is to experiment with the time-based learning rate schedule built into Keras.
+
+For example, you can specify a learning rate schedule that starts at 0.1 and drops by 0.0001 each epoch as follows:
+
+```python
+from keras.optimizers import SGD
+...
+sgd = SGD(lr=0.1, momentum=0.9, decay=0.0001, nesterov=False)
+model.compile(..., optimizer=sgd)
+```
+
+You can learn more about the <a href="http://keras.io/optimizers/#sgd">SGD class in Keras here</a>.
+
+## Lesson 11: Crash Course in Convolutional Neural Networks
+
+Convolutional Neural Networks are a powerful artificial neural network technique.
+
+They expect and preserve the spatial relationship between pixels in images by learning internal feature representations using small squares of input data.
+
+Feature are learned and used across the whole image, allowing for the objects in your images to be shifted or translated in the scene and still detectable by the network. It is this reason why this type of network is so useful for object recognition in photographs, picking out digits, faces, objects and so on with varying orientation.
+
+There are three types of layers in a Convolutional Neural Network:
+
+1. **Convolutional Layers** comprised of filters and feature maps.
+2. **Pooling Layers** that down sample the activations from feature maps.
+3. **Fully-Connected Layers** that plug on the end of the model and can be used to make predictions.
+
+In this lesson you are to familiarize yourself with the terminology used when describing convolutional neural networks.
+
+This may require a little research on your behalf.
+
+Don’t worry too much about how they work just yet, just learn the terminology and configuration of the various layers used in this type of network.
+
+## Lesson 12: Handwritten Digit Recognition
+
+Handwriting digit recognition is a difficult computer vision classification problem.
+
+The MNIST dataset is a standard problem for evaluating algorithms on the problem of handwriting digit recognition. It contains 60,000 images of digits that can be used to train a model, and 10,000 images that can be used to evaluate its performance.
+
+<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/1c943c47-de09-4148-8601-061c9d277e5a" />
+
+State of the art results can be achieved on the MNIST problem using convolutional neural networks. Keras makes loading the MNIST dataset dead easy.
+
+In this lesson, your goal is to develop a very simple convolutional neural network for the MNIST problem comprised of one convolutional layer, one max pooling layer and one dense layer to make predictions.
+
+For example, you can load the MNIST dataset in Keras as follows:
+
+```python
+from keras.datasets import mnist
+...
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+```
+
+It may take a moment to download the files to your computer.
+
+As a tip, the Keras <a href="http://keras.io/layers/convolutional/">Conv2D</a> layer that you will use as your first hidden layer expects image data in the format width x height x channels, where the MNIST data has 1 channel because the images are gray scale and a width and height of 28 pixels. You can easily reshape the MNIST dataset as follows:
+
+```python
+X_train = X_train.reshape((X_train.shape[0], 28, 28, 1))
+X_test = X_test.reshape((X_test.shape[0], 28, 28, 1))
+```
+
+You will also need to one-hot encode the output class value, that Keras also provides a handy helper function to achieve:
+
+```python
+from keras.utils import np_utils
+...
+y_train = np_utils.to_categorical(y_train)
+y_test = np_utils.to_categorical(y_test)
+```
+
+As a final tip, here is a model definition that you can use as a starting point:
+
+```python
+model = Sequential()
+model.add(Conv2D(32, (3, 3), padding='valid', input_shape=(28, 28, 1),
+activation='relu'))
+model.add(MaxPooling2D())
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dense(num_classes, activation='softmax'))
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+```
+
+## Lesson 13: Object Recognition in Small Photographs
