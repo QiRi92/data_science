@@ -410,3 +410,100 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 ```
 
 ## Lesson 13: Object Recognition in Small Photographs
+
+Object recognition is a problem where your model must indicate what is in a photograph.
+
+Deep learning models achieve state of the art results in this problem using deep convolutional neural networks.
+
+A popular standard dataset for evaluating models on this type of problem is called CIFAR-10. It contains 60,000 small photographs, each of one of 10 objects, like a cat, ship or airplane.
+
+<img width="800" height="600" alt="image" src="https://github.com/user-attachments/assets/bc587bf6-d5ba-41f4-98af-1be74d1ba278" />
+
+As with the MNIST dataset, Keras provides a convenient function that you can use to load the dataset, and it will download it to your computer the first time you try to load it. The dataset is a 163 MB so it may take a few minutes to download.
+
+Your goal in this lesson is to develop a deep convolutional neural network for the CIFAR-10 dataset. I would recommend a repeated pattern of convolution and pooling layers. Consider experimenting with drop-out and long training times.
+
+For example, you can load the CIFAR-10 dataset in Keras and prepare it for use with a convolutional neural network as follows:
+
+```python
+from keras.datasets import cifar10
+from keras.utils import to_categorical
+# load data
+(X_train, y_train), (X_test, y_test) = cifar10.load_data()
+# normalize inputs from 0-255 to 0.0-1.0
+X_train = X_train.astype('float32') 
+X_test = X_test.astype('float32')
+X_train = X_train / 255.0
+X_test = X_test / 255.0
+# one hot encode outputs
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
+```
+
+Output:
+
+```
+Downloading data from https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz
+170498071/170498071 ━━━━━━━━━━━━━━━━━━━━ 478s 3us/step
+```
+
+## Lesson 14: Improve Generalization With Data Augmentation
+
+Data preparation is required when working with neural network and deep learning models.
+
+Increasingly data augmentation is also required on more complex object recognition tasks. This is where images in your dataset are modified with random flips and shifts. This in essence makes your training dataset larger and helps your model to generalize the position and orientation of objects in images.
+
+Keras provides an image augmentation API that will create modified versions of images in your dataset just-in-time. The <a href="http://keras.io/preprocessing/image/">ImageDataGenerator</a> class can be used to define the image augmentation operations to perform which can be fit to a dataset and then used in place of your dataset when training your model.
+
+Your goal with this lesson is to experiment with the Keras image augmentation API using a dataset you are already familiar with from a previous lesson like MNIST or CIFAR-10.
+
+For example, the example below creates random rotations of up to 90 degrees of images in the MNIST dataset.
+
+```python
+# Random Rotations
+from keras.datasets import mnist
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from matplotlib import pyplot
+# load data
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+# reshape to be [samples][pixels][width][height]
+X_train = X_train.reshape((X_train.shape[0], 28, 28, 1))
+X_test = X_test.reshape((X_test.shape[0], 28, 28, 1))
+# convert from int to float
+X_train = X_train.astype('float32')
+X_test = X_test.astype('float32')
+# define data preparation
+datagen = ImageDataGenerator(rotation_range=90)
+# fit parameters from data
+datagen.fit(X_train)
+# configure batch size and retrieve one batch of images
+for X_batch, y_batch in datagen.flow(X_train, y_train, batch_size=9):
+	# create a grid of 3 * 3 images
+	for i in range(0, 9):
+		pyplot.subplot(330 + 1 + i)
+		pyplot.imshow(X_batch[i].reshape(28, 28), cmap=pyplot.get_cmap('gray'))
+	# show the plot
+	pyplot.show()
+	break
+```
+
+Output:
+
+<img width="458" height="306" alt="image" src="https://github.com/user-attachments/assets/907f1498-d0da-4ef2-b6a0-fb86c6321a0a" />
+
+You can learn more about the <a href="http://keras.io/preprocessing/image/">Keras image augmentation API</a>.
+
+## Deep Learning Mini-Course Review
+
+Take a moment and look back at how far you have come:
+
+- You discovered deep learning libraries in python including the powerful numerical libraries Theano and TensorFlow and the easy to use Keras library for applied deep learning.
+- You built your first neural network using Keras and learned how to use your deep learning models with scikit-learn and how to retrieve and plot the training history for your models.
+- You learned about more advanced techniques such as dropout regularization and learning rate schedules and how you can use these techniques in Keras.
+- Finally, you took the next step and learned about and developed convolutional neural networks for complex computer vision tasks and learned about augmentation of image data.
+
+Don’t make light of this, you have come a long way in a short amount of time. This is just the beginning of your journey with deep learning in python. Keep practicing and developing your skills.
+
+## Reference
+
+- <a href="https://github.com/QiRi92/data_science/blob/main/deep_keras/6_deep_learn.ipynb" rel="noopener" target="_blank">Codes</a>
